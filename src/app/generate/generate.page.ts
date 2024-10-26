@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ApicrudService } from '../services/apicrud.service';
-import { Asignatura } from 'src/interfaces/Asignaturas';
+import { Asignaturas } from 'src/interfaces/Asignaturas';
+
 
 @Component({
   selector: 'app-generate',
@@ -11,51 +12,44 @@ import { Asignatura } from 'src/interfaces/Asignaturas';
 })
 export class GeneratePage implements OnInit {
 
-  asignaturas: Asignatura[] = [];  // Lista de asignaturas
-  id: any;
-  qrdata: string = '';  // Para el código QR
-  nombre: string | null;
-  asignatura: Asignatura = {
+  ramo: any;
+  id:any;
+  qrdata:string;
+  nombre: any;
+
+
+  asignatura={
     id: 0,
-    name: '',
-    description: '',
-    image: '',
-    professor: '',
-    date: ''
-  };
+    nombre: "",
+    image: "",
+    profesor:"",
+    description:"",
+  }
+
+  asignaturas: Asignaturas[]=[];
+  
 
   constructor(
     private activated: ActivatedRoute,
-    private router: Router,
-    private alertcontroller: AlertController,
-    private apicrud: ApicrudService
+    private router: Router,private alertcontroller: AlertController, private apicrud: ApicrudService
   ) {
     // Recibir los parámetros enviados en la navegación
     this.activated.queryParams.subscribe(param => {
-      if (param['asignatura']) {
         this.asignatura = JSON.parse(param['asignatura']);
-      }
-    });
-
-    // Obtener el nombre del usuario desde el sessionStorage
-    this.nombre = sessionStorage.getItem('username');
-  }
+    })
+    this.qrdata='';
+    this.nombre= sessionStorage.getItem('username');
+    }
 
   ngOnInit() {
-    this.id = this.asignatura.id;
-    this.loadAsignaturas();  // Cargar las asignaturas desde la API
+  }
+  nClick(){
+    this.router.navigate(['/agregar.html']);
   }
 
-  // Cargar las asignaturas desde la API
-  loadAsignaturas() {
-    this.apicrud.getAsignaturas().subscribe(
-      (data) => {
-        this.asignaturas = data;  // Asignar los datos a la variable
-      },
-      (error) => {
-        console.error('Error al cargar las asignaturas', error);
-      }
-    );
+  ionViewWillEnter(){
+    this.id=this.ramo.id;
+    console.log(this.asignatura.id);
   }
 
   // Volver a la página anterior
@@ -64,17 +58,17 @@ export class GeneratePage implements OnInit {
   }
 
   // Actualizar asignatura
-  actualizarAsignatura(asignatura: Asignatura) {
-    this.router.navigate(['/actualizar', asignatura.id], {
-      queryParams: { asignatura: JSON.stringify(asignatura) }
-    });
+  actualizarAsignatura(Observable:any) {
+    this.router.navigate(['/actualizar', this.asignatura.id], {
+      queryParams: { asignatura: JSON.stringify(Observable)}}
+    )
   }
 
   // Generar QR
   generarQr() {
     if (this.asignatura && this.nombre) {
       // Generar el QR con la nueva estructura de la asignatura
-      this.qrdata = `Asignatura: ${this.asignatura.name}\nDescripción: ${this.asignatura.description}\nProfesor: ${this.asignatura.professor}\nFecha: ${this.asignatura.date}\nUsuario: ${this.nombre}`;
+      this.qrdata = `Asignatura: ${this.asignatura.nombre}\nDescripción: ${this.asignatura.description}\nProfesor: ${this.asignatura.profesor}\n`;
       console.log(this.qrdata);
     }
   }
@@ -105,17 +99,9 @@ export class GeneratePage implements OnInit {
   }
 
   // Eliminar asignatura
-  elimina() {
-    this.apicrud.deleteAsignatura(this.asignatura).subscribe(
-      (response) => {
-        console.log('Asignatura eliminada', response);
-        this.mensaje();
-      },
-      (error) => {
-        console.error('Error al eliminar asignatura', error);
-        alert('Hubo un error al eliminar la asignatura. Intenta nuevamente.');
-      }
-    );
+  elimina(){
+    this.apicrud.EliminarAsignatura(this.ramo).subscribe();
+    this.mensaje();
   }
 
   // Mostrar mensaje después de eliminar asignatura
@@ -144,19 +130,5 @@ export class GeneratePage implements OnInit {
       buttons: ['Ok']
     });
     alerta.present();
-  }
-
-  // Función para agregar una nueva asignatura a través de la API
-  agregarAsignatura(nuevaAsignatura: Asignatura) {
-    this.apicrud.postAsignaturas(nuevaAsignatura).subscribe(
-      (response) => {
-        console.log('Asignatura agregada correctamente', response);
-        this.router.navigate(['/home']);  // Redirigir a la página principal
-      },
-      (error) => {
-        console.error('Error al agregar la asignatura', error);
-        alert('Hubo un error al agregar la asignatura. Intenta nuevamente.');
-      }
-    );
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApicrudService } from '../services/apicrud.service';
 import { Asignatura } from 'src/interfaces/Asignaturas';
@@ -8,44 +8,34 @@ import { Asignatura } from 'src/interfaces/Asignaturas';
   templateUrl: './agregar.page.html',
   styleUrls: ['./agregar.page.scss'],
 })
-export class AgregarPage {
+export class AgregarPage implements OnInit {
 
   // Modelo para la nueva asignatura
   nuevaAsignatura: Asignatura = {
-    id: 0,  // El id lo puede generar el backend (si es autogenerado) o se puede generar en el frontend
-    name: '',
-    description: '',
-    image: '',
-    professor: '',
-    date: '',
-  };
-
-  constructor(private router: Router, private apicrudService: ApicrudService) {}
-
-  // Función para manejar el envío del formulario
-  onSubmit() {
-    // Validar que todos los campos estén completos
-    if (this.isFormValid()) {
-      // Llamar al servicio para agregar la nueva asignatura
-      this.apicrudService.postAsignaturas(this.nuevaAsignatura).subscribe(
-        response => {
-          // Si la asignatura se agregó correctamente, redirigir al usuario
-          console.log('Asignatura agregada correctamente', response);
-          this.router.navigate(['/home']);  // Redirigir a la página principal
-        },
-        error => {
-          // Si ocurre un error, mostrarlo en consola o manejarlo según corresponda
-          console.error('Error al agregar la asignatura', error);
-          alert('Hubo un error al agregar la asignatura. Intenta nuevamente.');
-        }
-      );
-    } else {
-      alert('Por favor, complete todos los campos.');
-    }
+    id: 0,
+    nombre: "",
+    description: "",
+    image: "",
+    profesor: "",
+    date: "",
   }
 
-  // Validar que todos los campos estén completos
-  isFormValid() {
-    return this.nuevaAsignatura.name && this.nuevaAsignatura.description && this.nuevaAsignatura.image && this.nuevaAsignatura.professor && this.nuevaAsignatura.date;
+  constructor(private router: Router, 
+              private apicrud: ApicrudService) {}
+
+  ngOnInit()  {
+  }
+
+  crearAsignatura(){
+    this.apicrud.postAsignatura(this.nuevaAsignatura).subscribe();
+    this.router.navigate(['/asignatura']);
+  }
+
+  onSubmit() {
+    // Aquí puedes manejar el envío del formulario y la imagen
+    console.log('Datos enviados:', this.nuevaAsignatura);
+  }
+  volver() {
+    this.router.navigate(['/asignatura']);
   }
 }

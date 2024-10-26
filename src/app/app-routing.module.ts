@@ -27,6 +27,18 @@ const routes: Routes = [
     path: 'agregar',
     loadChildren: () => import('./agregar/agregar.module').then( m => m.AgregarPageModule)
   },
+  {
+    path: 'asignatura',
+    loadChildren: () => import('./asignatura/asignatura.module').then( m => m.AsignaturaPageModule)
+  },
+  {
+    path: 'actualizar/:id',
+    loadChildren: () => import('./actualizar/actualizar.module').then( m => m.ActualizarPageModule)
+  },
+  {
+    path: 'eliminar/:id',
+    loadChildren: () => import('./eliminar/eliminar.module').then( m => m.EliminarPageModule)
+  },
   
   
 ];

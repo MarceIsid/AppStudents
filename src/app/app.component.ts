@@ -22,7 +22,7 @@ export class AppComponent {
     {
       icon:'calendar-outline',
       redirecTo: '/tabs/tab2',
-      name:'Asignatura'
+      name:'Asistencia'
     },
     {
       icon:'alarm-outline',
@@ -33,7 +33,12 @@ export class AppComponent {
       icon:'person-circle-outline',
       redirecTo: '/tabs/tab4',
       name:'Perfil'
-    }
+    },
+    {
+      icon:'alarm-outline',
+      redirecTo: '/asignatura',
+      name:'Asignatura'
+    },
 
   ]
 

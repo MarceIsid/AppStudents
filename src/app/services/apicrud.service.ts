@@ -17,7 +17,7 @@ export class ApicrudService {
   }
 
   // Crear una nueva asignatura
-  postAsignaturas(newAsignatura: Asignatura): Observable<Asignatura> {
+  postAsignatura(newAsignatura: Asignatura): Observable<Asignatura> {
     return this.httpclient.post<Asignatura>(`${environment.apiUrl}/asignaturas`, newAsignatura);
   }
 
@@ -27,12 +27,20 @@ export class ApicrudService {
   }
 
   // Actualizar una asignatura
-  putAsignaturas(asignatura: Asignatura): Observable<Asignaturas> {
+  putAsignaturas(asignatura: any): Observable<Asignaturas> {
     return this.httpclient.put<Asignaturas>(`${environment.apiUrl}/asignaturas/${asignatura.id}`, asignatura);
   }
 
   // Eliminar una asignatura
-  deleteAsignatura(asignatura: Asignatura): Observable<Asignaturas> {
+  ActualizarAsignatura(asignatura:any): Observable<Asignaturas>{
+    return this.httpclient.put<Asignaturas>(`${environment.apiUrl}/asignaturas/${asignatura.id}`, asignatura);
+  }
+
+  EliminarAsignatura(asignatura:any): Observable<Asignaturas>{
     return this.httpclient.delete<Asignaturas>(`${environment.apiUrl}/asignaturas/${asignatura.id}`);
+  }
+
+  BuscarAsignaturaId(id: number): Observable<Asignaturas> {
+    return this.getAsignaturaID(id);
   }
 }

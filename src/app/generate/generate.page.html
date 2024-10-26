@@ -11,23 +11,22 @@
 
 <ion-content [fullscreen]="true">
   <ion-card style="margin-top:10%">
-    <ion-card-header>
+    <ion-card-header  *ngFor="let asignatura of asignaturas">
       <ion-card-subtitle>Id Asignatura: {{asignatura.id}}</ion-card-subtitle>
-      <ion-card-title>Nombre asignatura: {{asignatura.name}}</ion-card-title>
+      <ion-card-title>Nombre asignatura: {{asignatura.nombre}}</ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
       <p>
         Descripción: {{asignatura.description}}<br>
-        Profesor: {{asignatura.professor}}<br>
-        Fecha: {{asignatura.date}}<br>
+        Profesor: {{asignatura.profesor}}<br>
         Imagen: <img [src]="asignatura.image" alt="Imagen de la asignatura" style="width: 100%; height: auto;">
       </p>
     </ion-card-content>
   </ion-card>
 
   <div style="text-align: center; margin-top: 30px;">
-    <ion-button (click)="actualizarAsignatura(asignatura)" shape="round" color="warning">
+    <ion-button (click)="actualizarAsignatura(this.asignatura)" shape="round" color="warning">
       Actualizar asignatura
     </ion-button>
     <ion-button (click)="consultaElimina()" shape="round" color="danger">
@@ -35,6 +34,10 @@
     </ion-button>
     <ion-button (click)="generarQr()" shape="round" color="success">
       Generar QR
+    </ion-button>
+
+    <ion-button (click)="nClick()"  color="tertiary" shape="round" href="./Agregar">
+      Agregar asignatura
     </ion-button>
 
     <ion-card class="ion-text-center" style="margin-top: 20px;">
